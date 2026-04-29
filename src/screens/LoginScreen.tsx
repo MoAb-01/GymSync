@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function LoginScreen({ signIn }: { signIn: () => void }) {
+export default function LoginScreen({ signIn }: { signIn: (role: 'member' | 'trainer') => void }) {
   const [role, setRole] = useState<'member' | 'trainer'>('member');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -68,7 +68,7 @@ export default function LoginScreen({ signIn }: { signIn: () => void }) {
 
         {/* Sign In Button */}
         <TouchableOpacity 
-          onPress={signIn}
+          onPress={() => signIn(role)}
           className="bg-[#00FF66] py-4 rounded-xl items-center shadow-lg shadow-[#00FF66]/30"
         >
           <Text className="text-[#0F172A] font-bold text-lg">Sign In — My Dashboard</Text>

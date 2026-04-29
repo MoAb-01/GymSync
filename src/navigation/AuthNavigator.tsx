@@ -3,7 +3,7 @@ import LoginScreen from '../screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 
-export default function AuthNavigator({ signIn }: { signIn: () => void }) {
+export default function AuthNavigator({ signIn }: { signIn: (role: 'member' | 'trainer') => void }) {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login">

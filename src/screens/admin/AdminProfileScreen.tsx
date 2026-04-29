@@ -2,7 +2,7 @@ import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function ProfileScreen() {
+export default function AdminProfileScreen() {
   const menuItems = [
     { id: 'notifications', title: 'Notifications', icon: 'notifications', iconColor: '#F59E0B' as const },
     { id: 'goals', title: 'Goals & Targets', icon: 'flag', iconColor: '#EC4899' as const },
@@ -19,34 +19,12 @@ export default function ProfileScreen() {
         {/* Header Profile */}
         <View className="items-center mt-8 mb-10">
           <View className="w-20 h-20 rounded-full border-2 border-[#00FF66] items-center justify-center mb-4 bg-[#0F172A]">
-            <Text className="text-[#00FF66] font-bold text-2xl">KD</Text>
+            <Text className="text-[#00FF66] font-bold text-2xl">TA</Text>
           </View>
-          <Text className="text-white text-xl font-bold mb-1">Kıvanç Demir</Text>
-          <Text className="text-slate-400 text-xs mb-3">Premium Member · Since Jan 2025</Text>
+          <Text className="text-white text-xl font-bold mb-1">PT Coach</Text>
+          <Text className="text-slate-400 text-xs mb-3">Head Trainer · GymSync Pro</Text>
           <View className="bg-[#00FF66]/10 px-3 py-1 rounded-full border border-[#00FF66]/20">
             <Text className="text-[#00FF66] text-xs font-bold">Active</Text>
-          </View>
-        </View>
-
-        {/* My Stats */}
-        <Text className="text-slate-400 text-[10px] font-bold tracking-widest mb-3 ml-1">MY STATS</Text>
-        <View className="flex-row justify-between mb-8">
-          <View className="bg-[#1E293B] rounded-2xl p-4 flex-1 mr-2">
-            <Text className="text-slate-400 text-[10px] font-bold tracking-widest mb-1">WORKOUTS</Text>
-            <Text className="text-[#00FF66] font-bold text-2xl">47</Text>
-            <Text className="text-slate-500 text-[10px] mt-1">This year</Text>
-          </View>
-          
-          <View className="bg-[#1E293B] rounded-2xl p-4 flex-1 mx-1">
-            <Text className="text-slate-400 text-[10px] font-bold tracking-widest mb-1">STREAK</Text>
-            <Text className="text-[#F59E0B] font-bold text-2xl">12d</Text>
-            <Text className="text-slate-500 text-[10px] mt-1">Personal best</Text>
-          </View>
-
-          <View className="bg-[#1E293B] rounded-2xl p-4 flex-1 ml-2">
-            <Text className="text-slate-400 text-[10px] font-bold tracking-widest mb-1">WEIGHT</Text>
-            <Text className="text-[#00FF66] font-bold text-2xl">-3kg</Text>
-            <Text className="text-slate-500 text-[10px] mt-1">Lost total</Text>
           </View>
         </View>
 
