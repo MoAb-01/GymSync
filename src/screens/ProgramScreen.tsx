@@ -1,18 +1,17 @@
 import { useState } from 'react';
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function ProgramScreen() {
   const [completed, setCompleted] = useState<number[]>([]);
+  const [exercisesList, setExercisesList] = useState<any[]>([]);
 
-  const exercises = [
-    { id: 1, name: 'Bench Press', sets: '4x8', rest: '90s', muscle: 'Chest' },
-    { id: 2, name: 'Incline DB Press', sets: '3x10', rest: '60s', muscle: 'Chest' },
-    { id: 3, name: 'Cable Fly', sets: '3x12', rest: '45s', muscle: 'Chest' },
-    { id: 4, name: 'Tricep Dips', sets: '3x15', rest: '45s', muscle: 'Arms' },
-    { id: 5, name: 'Overhead Press', sets: '4x8', rest: '90s', muscle: 'Shoulders' },
-  ];
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newTaskName, setNewTaskName] = useState('');
+  const [newSets, setNewSets] = useState('');
+  const [newRest, setNewRest] = useState('');
+  const [newMuscle, setNewMuscle] = useState('');
 
   const toggleExercise = (id: number) => {
     setCompleted((prev) => 
@@ -20,12 +19,105 @@ export default function ProgramScreen() {
     );
   };
 
+  const handleCreateTask = () => {
+    if (!newTaskName.trim()) return;
+    
+    const newTask = {
+      id: Date.now(),
+      name: newTaskName,
+      sets: newSets || '3x10',
+      rest: newRest || '60s',
+      muscle: newMuscle || 'Custom'
+    };
+    
+    setExercisesList([...exercisesList, newTask]);
+    setModalVisible(false);
+    
+    setNewTaskName('');
+    setNewSets('');
+    setNewRest('');
+    setNewMuscle('');
+  };
+
   const progress = completed.length;
-  const total = exercises.length;
+  const total = exercisesList.length;
   const progressPercent = total === 0 ? 0 : (progress / total) * 100;
 
   return (
     <SafeAreaView className="flex-1 bg-[#0F172A]" edges={['top', 'left', 'right']}>
+      {/* Add Task Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View className="flex-1 justify-end bg-black/70">
+          <View className="bg-[#1E293B] rounded-t-3xl p-6">
+            <View className="flex-row justify-between items-center mb-6">
+              <Text className="text-white text-xl font-bold">Create New Task</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Ionicons name="close" size={24} color="#64748B" />
+              </TouchableOpacity>
+            </View>
+
+            <View className="space-y-4 mb-6">
+              <View>
+                <Text className="text-slate-400 text-xs mb-2 ml-1 font-bold">TASK NAME</Text>
+                <TextInput
+                  className="bg-[#0F172A] text-white rounded-xl px-4 py-3 border border-[#334155]"
+                  placeholder="e.g. Pull-ups"
+                  placeholderTextColor="#64748B"
+                  value={newTaskName}
+                  onChangeText={setNewTaskName}
+                />
+              </View>
+
+              <View className="flex-row gap-3">
+                <View className="flex-1">
+                  <Text className="text-slate-400 text-xs mb-2 ml-1 font-bold">SETS & REPS</Text>
+                  <TextInput
+                    className="bg-[#0F172A] text-white rounded-xl px-4 py-3 border border-[#334155]"
+                    placeholder="e.g. 4x10"
+                    placeholderTextColor="#64748B"
+                    value={newSets}
+                    onChangeText={setNewSets}
+                  />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-slate-400 text-xs mb-2 ml-1 font-bold">REST</Text>
+                  <TextInput
+                    className="bg-[#0F172A] text-white rounded-xl px-4 py-3 border border-[#334155]"
+                    placeholder="e.g. 90s"
+                    placeholderTextColor="#64748B"
+                    value={newRest}
+                    onChangeText={setNewRest}
+                  />
+                </View>
+              </View>
+
+              <View>
+                <Text className="text-slate-400 text-xs mb-2 ml-1 font-bold">MUSCLE GROUP</Text>
+                <TextInput
+                  className="bg-[#0F172A] text-white rounded-xl px-4 py-3 border border-[#334155]"
+                  placeholder="e.g. Back"
+                  placeholderTextColor="#64748B"
+                  value={newMuscle}
+                  onChangeText={setNewMuscle}
+                />
+              </View>
+            </View>
+
+            <TouchableOpacity 
+              onPress={handleCreateTask}
+              className="bg-[#00FF66] rounded-xl py-4 items-center shadow-lg shadow-[#00FF66]/30"
+            >
+              <Text className="text-[#0F172A] font-bold text-lg">Add to Workout</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <ScrollView className="flex-1 px-5 pt-6" showsVerticalScrollIndicator={false}>
         
         {/* Header */}
@@ -56,7 +148,7 @@ export default function ProgramScreen() {
 
         {/* Exercises List */}
         <View className="space-y-4 mb-6">
-          {exercises.map((exercise) => {
+          {exercisesList.map((exercise) => {
             const isDone = completed.includes(exercise.id);
             return (
               <View key={exercise.id} className="bg-[#1E293B] rounded-2xl p-4 flex-row items-center mb-3">
@@ -95,7 +187,10 @@ export default function ProgramScreen() {
             <Text className="text-[#00FF66] font-bold text-xs text-center leading-tight">Request New{'\n'}Program</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity className="flex-1 bg-[#3B82F6] rounded-xl py-3 items-center justify-center shadow-lg shadow-[#3B82F6]/30">
+          <TouchableOpacity 
+            onPress={() => setModalVisible(true)}
+            className="flex-1 bg-[#3B82F6] rounded-xl py-3 items-center justify-center shadow-lg shadow-[#3B82F6]/30"
+          >
             <Text className="text-white font-bold text-sm">+ Create My Own</Text>
           </TouchableOpacity>
         </View>

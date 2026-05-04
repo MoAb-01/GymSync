@@ -1,8 +1,39 @@
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../context/AuthContext';
 
 export default function AdminProfileScreen() {
+  const { signOut } = useAuth();
+  const navigation = useNavigation<any>();
+
+  const handlePress = (item: any) => {
+    if (item.id === 'signout') {
+      Alert.alert(
+        "Sign Out",
+        "Are you sure you want to sign out?",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Sign Out", style: "destructive", onPress: signOut }
+        ]
+      );
+    } else {
+      const routeMap: { [key: string]: string } = {
+        'notifications': 'Notifications',
+        'goals': 'Goals',
+        'units': 'Units',
+        'privacy': 'Privacy',
+        'support': 'Support',
+      };
+      
+      const route = routeMap[item.id];
+      if (route) {
+        navigation.navigate(route);
+      }
+    }
+  };
+
   const menuItems = [
     { id: 'notifications', title: 'Notifications', icon: 'notifications', iconColor: '#F59E0B' as const },
     { id: 'goals', title: 'Goals & Targets', icon: 'flag', iconColor: '#EC4899' as const },
@@ -34,6 +65,7 @@ export default function AdminProfileScreen() {
           {menuItems.map((item) => (
             <TouchableOpacity 
               key={item.id} 
+              onPress={() => handlePress(item)}
               className="bg-[#1E293B] rounded-2xl p-4 flex-row items-center justify-between mb-3"
             >
               <View className="flex-row items-center">
